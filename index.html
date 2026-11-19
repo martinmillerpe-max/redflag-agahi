@@ -1,0 +1,469 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>تست سم‌سنجی کارفرما | چک‌لیست ۱۵ رد فلگ پنهان</title>
+    <link href="https://cdn.jsdelivr.net/gh/rastikerdar/vazirmatn@v33.003/Vazirmatn-font-face.css" rel="stylesheet" type="text/css" />
+    <style>
+        :root {
+            --brand: #0b525b;
+            --brand-deep: #041d21;
+            --accent: #2ec4b6;
+            --danger: #ff5c6c;
+            --warn: #fbbf24;
+            --glass-bg: rgba(255, 255, 255, 0.07);
+            --glass-card: rgba(255, 255, 255, 0.06);
+            --glass-border: rgba(255, 255, 255, 0.16);
+            --text-main: #ffffff;
+            --text-muted: rgba(255, 255, 255, 0.72);
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Vazirmatn', sans-serif; }
+
+        body {
+            background-color: var(--brand-deep);
+            background-image:
+                radial-gradient(circle at 15% 20%, rgba(11, 82, 91, 0.95) 0%, transparent 45%),
+                radial-gradient(circle at 85% 80%, rgba(46, 196, 182, 0.25) 0%, transparent 45%),
+                radial-gradient(circle at 80% 15%, rgba(255, 92, 108, 0.16) 0%, transparent 35%);
+            color: var(--text-main);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px 14px;
+            line-height: 1.6;
+        }
+
+        /* Main Spatial Glass Window */
+        .spatial-window {
+            max-width: 920px;
+            width: 100%;
+            background: var(--glass-bg);
+            backdrop-filter: blur(28px) saturate(140%);
+            -webkit-backdrop-filter: blur(28px) saturate(140%);
+            border: 1px solid var(--glass-border);
+            border-top: 1px solid rgba(255, 255, 255, 0.3);
+            border-radius: 32px;
+            box-shadow: 0 30px 70px rgba(0, 0, 0, 0.55), inset 0 1px 1px rgba(255, 255, 255, 0.2);
+            display: grid;
+            grid-template-columns: 1.35fr 1fr;
+            overflow: hidden;
+        }
+
+        /* Right Panel: Bento Content */
+        .main-panel {
+            padding: 30px 28px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            gap: 18px;
+        }
+
+        .top-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+
+        .pill-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            background: rgba(255, 92, 108, 0.16);
+            border: 1px solid rgba(255, 92, 108, 0.4);
+            color: #ff8a96;
+            font-size: 11.5px;
+            font-weight: 700;
+            padding: 5px 12px;
+            border-radius: 100px;
+        }
+
+        .time-pill {
+            background: rgba(255, 255, 255, 0.08);
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            color: var(--text-muted);
+            font-size: 11px;
+            padding: 5px 11px;
+            border-radius: 100px;
+        }
+
+        h1 {
+            font-size: 24px;
+            font-weight: 900;
+            line-height: 1.4;
+            margin-top: 4px;
+        }
+
+        h1 span {
+            color: var(--accent);
+        }
+
+        .subtitle {
+            font-size: 13.5px;
+            color: var(--text-muted);
+            margin-top: 6px;
+        }
+
+        /* Bento Grid Cards */
+        .bento-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+        }
+
+        .bento-card {
+            background: var(--glass-card);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            padding: 14px 12px;
+            transition: transform 0.2s, background 0.2s;
+        }
+
+        .bento-card:hover {
+            background: rgba(255, 255, 255, 0.11);
+            transform: translateY(-2px);
+        }
+
+        .bento-num {
+            font-size: 11px;
+            color: var(--accent);
+            font-weight: 800;
+            margin-bottom: 4px;
+        }
+
+        .bento-title {
+            font-size: 13px;
+            font-weight: 800;
+            margin-bottom: 6px;
+            color: #fff;
+        }
+
+        .bento-desc {
+            font-size: 11.5px;
+            color: var(--text-muted);
+            line-height: 1.55;
+        }
+
+        /* Scorecard Preview Bar (Inspired by VisionOS widgets) */
+        .scorecard-bar {
+            background: rgba(4, 29, 33, 0.45);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 18px;
+            padding: 12px 14px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
+        .score-label {
+            font-size: 12px;
+            font-weight: 700;
+            color: #e2e8f0;
+        }
+
+        .lights {
+            display: flex;
+            gap: 6px;
+        }
+
+        .light-pill {
+            font-size: 11px;
+            font-weight: 700;
+            padding: 4px 10px;
+            border-radius: 100px;
+            background: rgba(255, 255, 255, 0.08);
+        }
+
+        .light-pill.green { color: #4ade80; border: 1px solid rgba(74, 222, 128, 0.3); }
+        .light-pill.yellow { color: var(--warn); border: 1px solid rgba(251, 191, 36, 0.3); }
+        .light-pill.red { color: var(--danger); border: 1px solid rgba(255, 92, 108, 0.35); }
+
+        /* Left Sidebar Panel: Form & Action */
+        .side-panel {
+            background: rgba(4, 29, 33, 0.55);
+            border-right: 1px solid rgba(255, 255, 255, 0.12);
+            padding: 30px 24px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .meter-header {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .meter-circle {
+            width: 72px;
+            height: 72px;
+            margin: 0 auto 12px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.06);
+            border: 3px solid var(--accent);
+            border-left-color: var(--danger);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 0 24px rgba(46, 196, 182, 0.25);
+        }
+
+        .meter-circle strong {
+            font-size: 20px;
+            line-height: 1;
+            color: #fff;
+        }
+
+        .meter-circle span {
+            font-size: 10px;
+            color: var(--text-muted);
+        }
+
+        .form-title {
+            font-size: 16px;
+            font-weight: 800;
+            margin-bottom: 4px;
+        }
+
+        .form-sub {
+            font-size: 12px;
+            color: var(--text-muted);
+        }
+
+        .input-group {
+            margin-bottom: 12px;
+        }
+
+        label {
+            display: block;
+            font-size: 11.5px;
+            color: var(--text-muted);
+            margin-bottom: 5px;
+            font-weight: 600;
+        }
+
+        input {
+            width: 100%;
+            background: rgba(255, 255, 255, 0.08);
+            border: 1px solid rgba(255, 255, 255, 0.16);
+            color: #fff;
+            padding: 12px 14px;
+            border-radius: 14px;
+            font-size: 13.5px;
+            outline: none;
+            transition: 0.2s;
+        }
+
+        input::placeholder { color: rgba(255, 255, 255, 0.35); }
+
+        input:focus {
+            background: rgba(255, 255, 255, 0.12);
+            border-color: var(--accent);
+            box-shadow: 0 0 0 3px rgba(46, 196, 182, 0.2);
+        }
+
+        button {
+            width: 100%;
+            background: linear-gradient(135deg, var(--accent), #1fa89b);
+            color: var(--brand-deep);
+            border: none;
+            padding: 13px;
+            border-radius: 14px;
+            font-size: 14.5px;
+            font-weight: 900;
+            cursor: pointer;
+            margin-top: 6px;
+            transition: transform 0.2s, box-shadow 0.2s;
+            box-shadow: 0 10px 25px -5px rgba(46, 196, 182, 0.45);
+        }
+
+        button:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 14px 28px -5px rgba(46, 196, 182, 0.6);
+        }
+
+        button:disabled {
+            background: rgba(255, 255, 255, 0.2);
+            color: rgba(255, 255, 255, 0.5);
+            box-shadow: none;
+            cursor: not-allowed;
+        }
+
+        .micro-copy {
+            font-size: 11px;
+            color: var(--text-muted);
+            text-align: center;
+            margin-top: 12px;
+        }
+
+        /* Success State */
+        #successMsg {
+            display: none;
+            text-align: center;
+            padding: 18px 14px;
+            background: rgba(46, 196, 182, 0.14);
+            border: 1px solid var(--accent);
+            border-radius: 18px;
+        }
+
+        #successMsg h3 {
+            color: var(--accent);
+            font-size: 16px;
+            margin-bottom: 6px;
+        }
+
+        #successMsg p {
+            font-size: 12.5px;
+            color: var(--text-muted);
+            margin-bottom: 14px;
+        }
+
+        .dl-btn {
+            display: inline-block;
+            background: var(--accent);
+            color: var(--brand-deep);
+            text-decoration: none;
+            font-weight: 900;
+            padding: 10px 20px;
+            border-radius: 12px;
+            font-size: 13px;
+        }
+
+        /* Responsive for Mobile & Tablet */
+        @media (max-width: 780px) {
+            .spatial-window {
+                grid-template-columns: 1fr;
+                border-radius: 26px;
+            }
+            .main-panel { padding: 24px 20px 18px; }
+            .bento-grid { grid-template-columns: 1fr; }
+            .side-panel {
+                border-right: none;
+                border-top: 1px solid rgba(255, 255, 255, 0.12);
+                padding: 22px 20px 26px;
+            }
+            .meter-circle { display: none; }
+            h1 { font-size: 20px; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="spatial-window">
+    
+    <!-- پنل اصلی: معرفی و چیدمان بنتو -->
+    <div class="main-panel">
+        <div>
+            <div class="top-row">
+                <span class="pill-badge">🚩 تست سم‌سنجی کارفرما</span>
+                <span class="time-pill">⏱ چک‌لیست ۵ دقیقه‌ای (PDF)</span>
+            </div>
+
+            <h1>قبل از اینکه ۶ ماه از عمرت رو تو یه محیط سمی هدر بدی، <span>مچ کارفرما رو بگیر!</span></h1>
+            <p class="subtitle">
+                ۱۵ رد فلگ پنهان از لحظه دیدن آگهی استخدامی تا پای میز امضای قرارداد؛ همراه با «سوالات تله» برای مچ‌گیری در مصاحبه.
+            </p>
+        </div>
+
+        <div class="bento-grid">
+            <div class="bento-card">
+                <div class="bento-num">۰۱ | قبل از رزومه</div>
+                <div class="bento-title">فیلتر آگهی</div>
+                <div class="bento-desc">ترجمه واقعی «ما مثل خانواده‌ایم»، شرح شغل آچارفرانسه و حقوق توافقی.</div>
+            </div>
+            <div class="bento-card">
+                <div class="bento-num">۰۲ | حین مصاحبه</div>
+                <div class="bento-title">بازجویی معکوس</div>
+                <div class="bento-desc">سوالات تله برای کشف فرهنگ سرزنش، وعده‌های مبهم و گارد گرفتن مدیر.</div>
+            </div>
+            <div class="bento-card">
+                <div class="bento-num">۰۳ | قبل از امضا</div>
+                <div class="bento-title">تله‌های قرارداد</div>
+                <div class="bento-desc">شناسایی تسک رایگان، سفته‌های نجومی و عجله غیرعادی برای امضا.</div>
+            </div>
+        </div>
+
+        <div class="scorecard-bar">
+            <span class="score-label">🎯 سیستم امتیازدهی نهایی:</span>
+            <div class="lights">
+                <span class="light-pill green">۰-۲: چراغ سبز</span>
+                <span class="light-pill yellow">۳-۵: احتیاط</span>
+                <span class="light-pill red">۶+: فرار کن!</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- پنل کناری: فرم دریافت فایل -->
+    <div class="side-panel">
+        <div class="meter-header">
+            <div class="meter-circle">
+                <strong>۱۵</strong>
+                <span>رد فلگ</span>
+            </div>
+            <div class="form-title">دریافت رایگان چک‌لیست</div>
+            <div class="form-sub">اطلاعاتت رو وارد کن تا فایل بلافاصله دانلود بشه</div>
+        </div>
+
+        <form id="leadForm">
+            <!-- نام تب در گوگل شیت -->
+            <input type="hidden" name="SheetName" value="RedFlags">
+
+            <div class="input-group">
+                <label>اسمت چیه؟</label>
+                <input type="text" name="Name" required placeholder="مثلاً: سارا">
+            </div>
+            <div class="input-group">
+                <label>شماره موبایلت</label>
+                <input type="tel" name="Phone" required pattern="^09[0-9]{9}$" placeholder="09123456789" dir="ltr" style="text-align: right;">
+            </div>
+            <button type="submit" id="submitBtn">دانلود مستقیم چک‌لیست 📥</button>
+            <div class="micro-copy">🔒 شماره‌ات کاملاً محرمانه می‌مونه و بدون اسپم.</div>
+        </form>
+
+        <div id="successMsg">
+            <h3>فایل برات باز شد! 🚀</h3>
+            <p>قبل از مصاحبه بعدی حتماً این ۱۵ مورد رو چک کن تا تصمیمت هوشمندانه باشه.</p>
+            <a href="RedFlags.pdf" download="تست-سم-سنجی-کارفرما.pdf" class="dl-btn">دانلود مجدد PDF</a>
+        </div>
+    </div>
+
+</div>
+
+<script>
+    const scriptURL = 'https://script.google.com/macros/s/AKfycbwKByoOOVqJzZ0b7ivGUjs331zLanElj_QBNhyy7ct8kYBURWKhN7mxxf-MEgQRIljz/exec';
+    const form = document.getElementById('leadForm');
+    const btn = document.getElementById('submitBtn');
+    const msg = document.getElementById('successMsg');
+
+    form.addEventListener('submit', e => {
+        e.preventDefault();
+        btn.disabled = true;
+        btn.innerText = 'در حال آماده‌سازی فایل... ⏳';
+
+        fetch(scriptURL, { method: 'POST', body: new FormData(form)})
+            .then(response => {
+                form.style.display = 'none';
+                msg.style.display = 'block';
+                const link = document.createElement('a');
+                link.href = 'RedFlags.pdf';
+                link.download = 'تست-سم-سنجی-کارفرما.pdf';
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+            })
+            .catch(error => {
+                alert('ارتباط برقرار نشد! لطفاً اینترنتت رو چک کن و دوباره بزن.');
+                btn.disabled = false;
+                btn.innerText = 'دانلود مستقیم چک‌لیست 📥';
+            });
+    });
+</script>
+
+</body>
+</html>
